@@ -13,15 +13,5 @@
         }
       }
     }
-  },
-  "command": {
-    "tmux_orchestrator": {
-      "command": "python3 /home/sauly/dev/Tmux-Orchestrator/mcp_server_tmux.py",
-      "description": "Starts the Tmux Orchestrator MCP Server",
-      "template": "python3 /home/sauly/dev/Tmux-Orchestrator/mcp_server_tmux.py"
-    }
-  },
-  "tools": {
-    "tmux_orchestrator": true
   }
 }

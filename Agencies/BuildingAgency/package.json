@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "name": "building-agency",
+  "version": "1.0.0",
+  "main": "runner.js",
+  "scripts": {
+    "start": "node runner.js"
+  },
+  "dependencies": {}
+}

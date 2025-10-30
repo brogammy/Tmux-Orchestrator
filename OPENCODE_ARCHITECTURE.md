@@ -99,9 +99,9 @@ Each model is tagged as either `(free)` or `(paid)`:
 ```json
 {
   "models": {
-    "claude-sonnet": {
+    "opencode-sonnet": {
       "tier": "paid",
-      "provider": "anthropic",
+      "provider": "opencode",
       "capabilities": ["coding", "reasoning", "analysis"]
     },
     "qwen-coder": {
@@ -125,10 +125,10 @@ Project Managers analyze each task and select the best model:
 
 ### 3. Automatic Fallback
 
-When Claude hits rate limits:
+When a paid provider hits rate limits:
 ```
-Claude Sonnet (paid) → rate limited
-    ↓
+Opencode Sonnet (paid) → rate limited
+  ↓
 Qwen Coder (free) → executes successfully
 ```
 
@@ -213,7 +213,7 @@ await projectManager.initialize();
 const result = await projectManager.receivePrompt("Build a REST API");
 
 // PM analyzes and delegates:
-// 1. CodeAgent (using claude-sonnet for complex implementation)
+// 1. CodeAgent (using opencode-sonnet for complex implementation)
 // 2. CodeValidator (using phi-3 for fast validation)
 
 // Result includes model selections and execution details
@@ -253,7 +253,7 @@ const recommendation = agent.recommendModelForTask(
 
 // Result:
 // {
-//   recommendedModel: "claude-sonnet",
+//   recommendedModel: "opencode-sonnet",
 //   tier: "paid",
 //   score: 18,
 //   reason: "Complex security implementation"
@@ -295,7 +295,7 @@ await chatAgent.receiveInput(
 // Routed to WebDevAgency
 // PM delegates to:
 //   - FrontendAgent (React UI) → qwen-coder (free)
-//   - BackendAgent (Auth API) → claude-sonnet (paid)
+//   - BackendAgent (Auth API) → opencode-sonnet (paid)
 //   - CodeValidator (Testing) → phi-3 (free)
 ```
 
@@ -312,7 +312,7 @@ node chatAgent.js "You are the Orchestrator. Set up project managers for: 1. Bac
 export PREFER_FREE_MODELS="false"
 node chatAgent.js "You are the Orchestrator. Set up project managers for: 1. Backend (Microservices) - Design a microservices architecture. Schedule yourself to check in every 2 hours."
 
-# Uses: claude-sonnet (paid) ✓
+# Uses: opencode-sonnet (paid) ✓
 ```
 
 ---
@@ -343,7 +343,7 @@ node scripts/create-agency.js list
       "name": "SpecializedAgent",
       "description": "Does specific work",
       "type": "SpecializedAgent",
-      "model": "claude-sonnet",
+  "model": "opencode-sonnet",
       "instructions": "Specific instructions for this agent"
     }
   ],
@@ -391,7 +391,7 @@ Each agent can have:
 {
   "agentConfigs": {
     "MyAgent": {
-      "primaryModel": "claude-sonnet",
+  "primaryModel": "opencode-sonnet",
       "fallbackModels": ["qwen-coder", "phi-3"],
       "systemPrompt": "You are a specialized agent...",
       "capabilities": ["specialized-task"],
@@ -478,8 +478,8 @@ node apex-orchestrator.js agency BuildingAgency
 
 ### Paid Models (tier: "paid")
 
-- **claude-sonnet** - Advanced coding and reasoning
-- **claude-haiku** - Fast, efficient responses
+- **opencode-sonnet** - Advanced coding and reasoning
+- **opencode-haiku** - Fast, efficient responses
 
 ---
 

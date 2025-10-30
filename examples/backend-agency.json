@@ -6,36 +6,36 @@
     {
       "name": "APIDesigner",
       "description": "API architecture and design specialist",
-      "type": "APIDesigner",
-      "model": "claude-sonnet",
+  "type": "APIDesigner",
+  "model": "opencode-sonnet",
       "instructions": "Design RESTful and GraphQL APIs following best practices. Define clear contracts and documentation."
     },
     {
       "name": "BackendAgent",
       "description": "Backend implementation specialist",
-      "type": "BackendAgent",
-      "model": "claude-sonnet",
+  "type": "BackendAgent",
+  "model": "opencode-sonnet",
       "instructions": "Implement scalable backend services with proper error handling and authentication."
     },
     {
       "name": "DatabaseAgent",
       "description": "Database specialist for schema design and optimization",
-      "type": "DatabaseAgent",
-      "model": "claude-haiku",
+  "type": "DatabaseAgent",
+  "model": "opencode-haiku",
       "instructions": "Design database schemas, optimize queries, and ensure data consistency."
     },
     {
       "name": "SecurityAgent",
       "description": "Security and authentication specialist",
-      "type": "SecurityAgent",
-      "model": "claude-sonnet",
+  "type": "SecurityAgent",
+  "model": "opencode-sonnet",
       "instructions": "Implement authentication, authorization, and security best practices. Audit code for vulnerabilities."
     },
     {
       "name": "CodeValidator",
       "description": "Backend code validation and testing",
-      "type": "CodeValidator",
-      "model": "claude-haiku",
+  "type": "CodeValidator",
+  "model": "opencode-haiku",
       "instructions": "Validate backend code, test API endpoints, and ensure performance standards."
     }
   ],

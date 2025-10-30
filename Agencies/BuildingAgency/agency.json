@@ -4,8 +4,8 @@
   "purpose": "software development",
   "created": "2025-10-29T00:00:00.000Z",
   "projectManager": {
-    "file": "ProjectManager.js",
-    "model": "claude-sonnet",
+  "file": "ProjectManager.js",
+  "model": "opencode-sonnet",
     "capabilities": [
       "task-planning",
       "agent-coordination",
@@ -18,8 +18,8 @@
       "name": "CodeAgent",
       "type": "CodeAgent",
       "description": "General-purpose coding agent for implementation tasks",
-      "file": "CodeAgent.js",
-      "model": "claude-sonnet",
+  "file": "CodeAgent.js",
+  "model": "opencode-sonnet",
       "fallbackModels": [
         "qwen-coder",
         "deepseek-coder",
@@ -37,8 +37,8 @@
       "name": "CodeValidator",
       "type": "CodeValidator",
       "description": "Code validation and quality assurance specialist",
-      "file": "CodeValidator.js",
-      "model": "claude-haiku",
+  "file": "CodeValidator.js",
+  "model": "opencode-haiku",
       "fallbackModels": [
         "phi-3",
         "mistral-nemo"

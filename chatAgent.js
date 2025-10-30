@@ -152,11 +152,11 @@ class ChatAgent {
     const complexity = this.estimateComplexity(description);
 
     if (complexity === 'High') {
-      return ['claude-sonnet (paid)', 'fallback: deepseek-coder (free)'];
+      return ['opencode-sonnet (paid)', 'fallback: deepseek-coder (free)'];
     } else if (complexity === 'Low') {
       return ['qwen-coder (free)', 'phi-3 (free)'];
     } else {
-      return ['qwen-coder (free)', 'fallback: claude-haiku (paid)'];
+      return ['qwen-coder (free)', 'fallback: opencode-haiku (paid)'];
     }
   }
 

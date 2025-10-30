@@ -1,7 +1,7 @@
 // CodeValidator - Validates and tests code for BuildingAgency
 // Ensures code does the initiated job correctly
 // Works with CodeAgent with OpenCode integration and (free)/(paid) models
-// Automatic fallback to free models when Claude rate limited
+// Automatic fallback to free models when paid-provider rate limited
 
 import OpenCodeAgent from '../../lib/OpenCodeAgent.js';
 

@@ -242,21 +242,21 @@ The system automatically selects optimal models for each task:
 - **phi-3**: Fast responses, validation
 
 ### Paid Models (tier: "paid")
-- **claude-sonnet**: Complex implementations
-- **claude-haiku**: Fast premium responses
+- **opencode-sonnet**: Complex implementations
+- **opencode-haiku**: Fast premium responses
 
 ### Automatic Selection
 
 ```
 Simple task → qwen-coder (free)
-Complex security → claude-sonnet (paid)
+Complex security → opencode-sonnet (paid)
 Quick validation → phi-3 (free)
 ```
 
 ### Automatic Fallback
 
 ```
-claude-sonnet (paid) → Rate Limited
+opencode-sonnet (paid) → Rate Limited
      ↓
 deepseek-coder (free) → SUCCESS ✓
 ```
@@ -283,10 +283,10 @@ $ node chatAgent.js
 📋 Processing: 1. Backend (Python) - Create authentication system
 🎯 Routing to: BuildingAgency
 📥 [ProjectManager] Received prompt: Create authentication system
-🤖 [ProjectManager] Selected claude-sonnet (paid) for CodeAgent task
+🤖 [ProjectManager] Selected opencode-sonnet (paid) for CodeAgent task
 📥 [CodeAgent] Received task: Create authentication system
-🤖 [CodeAgent] Using task-optimized model: claude-sonnet
-✅ [CodeAgent] Implementation complete using claude-sonnet (paid)
+🤖 [CodeAgent] Using task-optimized model: opencode-sonnet
+✅ [CodeAgent] Implementation complete using opencode-sonnet (paid)
 ✅ [ProjectManager] Delegating to CodeValidator...
 🤖 [ProjectManager] Selected phi-3 (free) for CodeValidator task
 ✅ [CodeValidator] Result: PASSED using phi-3 (free)
@@ -298,8 +298,8 @@ $ node chatAgent.js
 ✅ 1. Backend (Python) - Create authentication system
    Agency: BuildingAgency
    Status: Completed
-   Models used:
-     - CodeAgent: claude-sonnet (paid)
+      Models used:
+           - CodeAgent: opencode-sonnet (paid)
      - CodeValidator: phi-3 (free)
 
 ================================================================================

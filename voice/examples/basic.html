@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Module - Basic Example</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            min-width: 120px;
+        }
+
+        .voice-btn {
+            background: #667eea;
+            color: white;
+        }
+
+        .voice-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .voice-btn.recording {
+            background: #ef4444;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .status {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #aaa;
+        }
+
+        .status-indicator.active {
+            background: #4ade80;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .transcription {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .final-text {
+            font-size: 1.2em;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .interim-text {
+            font-size: 1em;
+            color: #999;
+            font-style: italic;
+            margin-top: 10px;
+        }
+
+        .confidence {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-left: 10px;
+            font-size: 0.9em;
+        }
+
+        .history {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .history h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .history-item {
+            background: white;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 3px;
+            border-left: 3px solid #667eea;
+            font-size: 0.95em;
+        }
+
+        .history-text {
+            color: #333;
+            margin-bottom: 3px;
+        }
+
+        .history-meta {
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        .info {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #1976d2;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #d32f2f;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #d32f2f;
+        }
+
+        .no-support {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎤 Voice Module - Basic Example</h1>
+
+        <div id="info" class="info" style="display: none;">
+            Web Speech API is not supported in your browser. Please use Chrome, Edge, or Safari.
+        </div>
+
+        <div class="controls">
+            <button class="voice-btn" id="voiceBtn">🎤 Start Recording</button>
+            <button id="clearBtn" style="background: #f59e0b; color: white;">🗑️ Clear</button>
+        </div>
+
+        <div class="status">
+            <span class="status-indicator"></span>
+            <span id="statusText">Ready</span>
+        </div>
+
+        <div class="transcription" id="transcription">
+            <p style="color: #999;">Transcription will appear here...</p>
+        </div>
+
+        <div class="history" id="history">
+            <h3>📝 History</h3>
+            <p style="color: #999;">No commands yet...</p>
+        </div>
+    </div>
+
+    <!-- Load voice module -->
+    <script src="../VoiceModule.js"></script>
+    <script src="../WebSpeechAdapter.js"></script>
+    <script src="../VoiceHistory.js"></script>
+    <script src="../config.js"></script>
+
+    <script>
+        // Initialize voice module
+        const voice = new VoiceModule({
+            language: 'en-US',
+            continuous: false,
+            interimResults: true,
+            autoSendOnFinal: false,
+            ttsEnabled: true
+        });
+
+        const history = new VoiceHistory({
+            maxSize: 50,
+            persistence: 'localStorage',
+            persistenceKey: 'voiceHistory'
+        });
+
+        // DOM elements
+        const voiceBtn = document.getElementById('voiceBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const transcription = document.getElementById('transcription');
+        const historyDiv = document.getElementById('history');
+        const statusText = document.getElementById('statusText');
+        const infoDiv = document.getElementById('info');
+
+        // Check browser support
+        if (!voice.isSupported) {
+            infoDiv.style.display = 'block';
+            voiceBtn.disabled = true;
+            statusText.textContent = 'Not supported';
+            return;
+        }
+
+        // Voice button click handler
+        voiceBtn.addEventListener('click', async () => {
+            if (voice.isRecording()) {
+                await voice.stopRecording();
+            } else {
+                await voice.startRecording();
+            }
+        });
+
+        // Clear button
+        clearBtn.addEventListener('click', () => {
+            history.clear();
+            updateHistoryDisplay();
+            transcription.innerHTML = '<p style="color: #999;">Transcription will appear here...</p>';
+        });
+
+        // Voice events
+        voice.on('recordingStarted', () => {
+            voiceBtn.textContent = '⏹️ Stop Recording';
+            voiceBtn.classList.add('recording');
+            statusText.textContent = 'Recording...';
+            statusText.parentElement.querySelector('.status-indicator').classList.add('active');
+            transcription.innerHTML = '<p style="color: #fbbf24;">Listening...</p>';
+        });
+
+        voice.on('transcribing', (event) => {
+            let html = '';
+            if (event.final) {
+                html += `<div class="final-text">${escapeHtml(event.final)}</div>`;
+            }
+            if (event.interim) {
+                html += `<div class="interim-text">${escapeHtml(event.interim)}</div>`;
+            }
+            transcription.innerHTML = html;
+        });
+
+        voice.on('transcript', (transcript) => {
+            let html = `<div class="final-text">${escapeHtml(transcript.text)}`;
+            html += `<span class="confidence">${(transcript.confidence * 100).toFixed(0)}%</span></div>`;
+            transcription.innerHTML = html;
+
+            // Add to history
+            history.add(transcript);
+            updateHistoryDisplay();
+
+            // Speak confirmation
+            voice.speak('Command received');
+        });
+
+        voice.on('recordingEnded', () => {
+            voiceBtn.classList.remove('recording');
+            statusText.textContent = 'Processing...';
+        });
+
+        voice.on('listeningEnded', () => {
+            voiceBtn.textContent = '🎤 Start Recording';
+            statusText.textContent = 'Ready';
+            statusText.parentElement.querySelector('.status-indicator').classList.remove('active');
+        });
+
+        voice.on('speaking', (event) => {
+            statusText.textContent = 'Speaking...';
+        });
+
+        voice.on('speakingEnded', () => {
+            statusText.textContent = 'Ready';
+        });
+
+        voice.on('error', (event) => {
+            voiceBtn.classList.remove('recording');
+            voiceBtn.textContent = '🎤 Start Recording';
+            transcription.innerHTML = `<p style="color: #ef4444;"><strong>Error:</strong> ${escapeHtml(event.error)}</p>`;
+            statusText.textContent = 'Error: ' + event.error;
+        });
+
+        // Update history display
+        function updateHistoryDisplay() {
+            const entries = history.getRecent(5);
+
+            if (entries.length === 0) {
+                historyDiv.innerHTML = '<h3>📝 History</h3><p style="color: #999;">No commands yet...</p>';
+                return;
+            }
+
+            let html = '<h3>📝 History</h3>';
+            html += entries
+                .map(
+                    (item) => `
+                <div class="history-item">
+                    <div class="history-text">"${escapeHtml(item.text)}"</div>
+                    <div class="history-meta">
+                        ${(item.confidence * 100).toFixed(0)}% confidence •
+                        ${new Date(item.timestamp).toLocaleTimeString()}
+                    </div>
+                </div>
+            `
+                )
+                .join('');
+
+            historyDiv.innerHTML = html;
+        }
+
+        // Escape HTML for safe display
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Load initial history
+        updateHistoryDisplay();
+
+        console.log('✅ Voice module initialized');
+        console.log('ℹ️ Click the button to start recording');
+    </script>
+</body>
+</html>

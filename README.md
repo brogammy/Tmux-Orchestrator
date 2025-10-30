@@ -96,7 +96,7 @@ Schedule yourself to check in every hour."
 
 **What happens:**
 - Routes to **BackendAgency**
-- PM delegates to BackendAgent (paid: claude-sonnet for complex auth)
+ - PM delegates to BackendAgent (paid: opencode-sonnet for complex auth)
 - SecurityAgent handles OAuth2 implementation
 - CodeValidator runs tests (free: phi-3)
 
@@ -142,13 +142,13 @@ The Project Manager automatically selects models based on:
 
 - **Simple** (bug fixes, styling): Free models (qwen-coder, phi-3)
 - **Medium** (features, refactoring): Free/paid based on specifics
-- **Complex** (architecture, security): Paid models (claude-sonnet)
+- **Complex** (architecture, security): Paid models (opencode-sonnet)
 
 ### Task Type
 
 - **Fast validation**: phi-3 (free)
-- **Code implementation**: qwen-coder or claude-sonnet
-- **Architecture/planning**: claude-sonnet (paid)
+- **Code implementation**: qwen-coder or opencode-sonnet
+- **Architecture/planning**: opencode-sonnet (paid)
 - **Code review**: mistral-nemo (free) or claude-haiku (paid)
 
 ### Cost Preferences
@@ -165,7 +165,7 @@ export PREFER_FREE_MODELS="false"
 
 ```
 Task: "Build authentication system"
-PM selects: claude-sonnet (paid)
+PM selects: opencode-sonnet (paid)
 ↓
 Claude rate limited (429)
 ↓
@@ -192,8 +192,8 @@ Task completes successfully ✓
 
 | Model | Specialization | Best For |
 |-------|---------------|----------|
-| **claude-sonnet** | Advanced coding | Complex implementation, security |
-| **claude-haiku** | Fast premium | Quick but high-quality responses |
+| **opencode-sonnet** | Advanced coding | Complex implementation, security |
+| **opencode-haiku** | Fast premium | Quick but high-quality responses |
 
 ---
 
@@ -263,7 +263,7 @@ Create `examples/my-agency.json`:
       "name": "Agent1",
       "description": "First agent",
       "type": "Agent1",
-      "model": "claude-sonnet",
+  "model": "opencode-sonnet",
       "instructions": "Specific instructions..."
     },
     {
@@ -397,8 +397,8 @@ Schedule yourself to check in every 3 hours."
 1. **chatAgent** receives directive (text or voice)
 2. **Orchestrator** routes to appropriate agency
 3. **Project Manager** analyzes tasks and selects optimal models:
-   - Frontend: Complex UI → claude-sonnet (paid)
-   - Backend: Auth implementation → claude-sonnet (paid)
+  - Frontend: Complex UI → opencode-sonnet (paid)
+  - Backend: Auth implementation → opencode-sonnet (paid)
    - Database: Schema design → qwen-coder (free)
    - Testing: Test generation → phi-3 (free)
 4. **Agents execute** in tmux panels with assigned models
@@ -406,8 +406,8 @@ Schedule yourself to check in every 3 hours."
    ```json
    {
      "modelSelections": [
-       {"agent": "FrontendAgent", "model": "claude-sonnet", "tier": "paid"},
-       {"agent": "BackendAgent", "model": "claude-sonnet", "tier": "paid"},
+       {"agent": "FrontendAgent", "model": "opencode-sonnet", "tier": "paid"},
+       {"agent": "BackendAgent", "model": "opencode-sonnet", "tier": "paid"},
        {"agent": "DatabaseAgent", "model": "qwen-coder", "tier": "free"},
        {"agent": "CodeValidator", "model": "phi-3", "tier": "free"}
      ]

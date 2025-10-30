@@ -1,7 +1,7 @@
 // CodeAgent - Handles coding tasks for BuildingAgency
 // Receives prompts from ProjectManager
 // Implements code with OpenCode integration and (free)/(paid) model support
-// Automatic fallback to free models when Claude rate limited
+// Automatic fallback to free models when paid-provider rate limited
 
 import OpenCodeAgent from '../../lib/OpenCodeAgent.js';
 

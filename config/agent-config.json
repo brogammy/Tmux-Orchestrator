@@ -2,9 +2,9 @@
   "$schema": "./agent-config-schema.json",
   "description": "Agent configuration with free/paid model tagging for OpenCode integration",
   "models": {
-    "claude-sonnet": {
-      "provider": "anthropic",
-      "model": "claude-3-5-sonnet-20241022",
+    "opencode-sonnet": {
+      "provider": "opencode",
+      "model": "opencode-sonnet:latest",
       "tier": "paid",
       "capabilities": ["coding", "reasoning", "analysis", "planning"],
       "costPer1kTokens": 0.003,
@@ -13,9 +13,9 @@
         "tokensPerMinute": 100000
       }
     },
-    "claude-haiku": {
-      "provider": "anthropic",
-      "model": "claude-3-5-haiku-20241022",
+    "opencode-haiku": {
+      "provider": "opencode",
+      "model": "opencode-haiku:latest",
       "tier": "paid",
       "capabilities": ["coding", "fast-responses", "simple-tasks"],
       "costPer1kTokens": 0.00025,

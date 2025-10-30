@@ -88,6 +88,254 @@
             padding-bottom: 10px;
         }
 
+        /* Voice UI Styles */
+        .voice-panel {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #3a3a3a;
+            margin-bottom: 20px;
+        }
+
+        .voice-panel h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .voice-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .voice-btn {
+            padding: 12px 24px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .voice-btn:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .voice-btn.recording {
+            background: #ef4444;
+            animation: pulse 1s infinite;
+        }
+
+        .voice-btn.processing {
+            background: #f59e0b;
+        }
+
+        .voice-btn.speaking {
+            background: #10b981;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .voice-indicator {
+            padding: 10px 15px;
+            border-radius: 5px;
+            background: #333;
+            font-weight: bold;
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .voice-indicator.state-recording {
+            background: #ef4444;
+            color: white;
+        }
+
+        .voice-indicator.state-processing {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .voice-indicator.state-speaking {
+            background: #10b981;
+            color: white;
+        }
+
+        .voice-indicator.state-ready {
+            background: #667eea;
+            color: white;
+        }
+
+        .voice-indicator.state-error {
+            background: #dc2626;
+            color: white;
+        }
+
+        .transcription-display {
+            background: #333;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .final-transcript {
+            font-size: 1.1em;
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .interim-transcript {
+            font-size: 0.95em;
+            color: #fbbf24;
+            margin-top: 5px;
+        }
+
+        .transcript-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .transcript-result .text {
+            flex: 1;
+            font-size: 1em;
+            color: #4ade80;
+        }
+
+        .transcript-result .confidence {
+            background: #667eea;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-weight: bold;
+        }
+
+        .voice-history {
+            background: #333;
+            padding: 10px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: #2a2a2a;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+        }
+
+        .history-text {
+            font-size: 0.95em;
+            color: #e0e0e0;
+            margin-bottom: 5px;
+        }
+
+        .history-meta {
+            display: flex;
+            gap: 10px;
+            font-size: 0.85em;
+            color: #a0a0a0;
+        }
+
+        .status {
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .status[data-status="received"] {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .status[data-status="sent"] {
+            background: #10b981;
+            color: white;
+        }
+
+        .status[data-status="executed"] {
+            background: #4ade80;
+            color: white;
+        }
+
+        .status[data-status="failed"] {
+            background: #ef4444;
+            color: white;
+        }
+
+        .confidence {
+            background: #667eea;
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: white;
+        }
+
+        .voice-settings {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .voice-setting {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .voice-setting label {
+            font-weight: bold;
+            min-width: 100px;
+        }
+
+        .voice-setting select,
+        .voice-setting input {
+            padding: 8px;
+            background: #333;
+            color: #e0e0e0;
+            border: 1px solid #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .voice-setting input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .empty {
+            color: #888;
+            text-align: center;
+            padding: 20px;
+        }
+
         .flow-diagram {
             display: flex;
             flex-direction: column;
@@ -276,6 +524,38 @@
         <p>Agent-Agnostic Multi-Agency System with OpenCode Integration</p>
     </div>
 
+    <div class="voice-panel">
+        <h2>🎤 Voice Control</h2>
+        <div class="voice-controls">
+            <button class="voice-btn" data-action="toggle-voice">🎤 Speak</button>
+            <div class="voice-indicator">Ready</div>
+            <button class="clear-voice-history">🗑️ Clear History</button>
+        </div>
+        <div class="transcription-display">
+            <p class="empty">Ready to listen...</p>
+        </div>
+        <div class="voice-history">
+            <p class="empty">No voice commands yet</p>
+        </div>
+        <div class="voice-settings">
+            <div class="voice-setting">
+                <label for="voice-language">Language:</label>
+                <select class="voice-language-select" id="voice-language">
+                    <option value="en-US">English (US)</option>
+                    <option value="en-GB">English (UK)</option>
+                    <option value="es-ES">Spanish</option>
+                    <option value="fr-FR">French</option>
+                    <option value="de-DE">German</option>
+                    <option value="it-IT">Italian</option>
+                </select>
+            </div>
+            <div class="voice-setting">
+                <label for="voice-tts">Text-to-Speech:</label>
+                <input type="checkbox" class="voice-tts-toggle" id="voice-tts" checked>
+            </div>
+        </div>
+    </div>
+
     <div class="main-container">
         <div class="stats-panel">
             <h2>📊 System Statistics</h2>
@@ -368,7 +648,77 @@
         </div>
     </div>
 
+    <script src="../voice/index.js"></script>
+    <script src="../voice/VoiceModule.js"></script>
+    <script src="../voice/WebSpeechAdapter.js"></script>
+    <script src="../voice/VoiceHistory.js"></script>
+    <script src="./voice-ui.js"></script>
+
     <script>
+        // Voice module initialization
+        let voiceModule = null;
+        let voiceUI = null;
+
+        async function initializeVoice() {
+            try {
+                // Create voice module
+                const { createVoiceModule } = window;
+                voiceModule = createVoiceModule({
+                    language: 'en-US',
+                    continuous: false,
+                    interimResults: true,
+                    autoSendOnFinal: false,
+                    ttsEnabled: true
+                });
+
+                // Check if voice is supported
+                if (!voiceModule.isSupported) {
+                    console.warn('Web Speech API not supported in this browser');
+                    document.querySelector('.voice-panel').innerHTML +=
+                        '<p style="color: #ef4444; margin-top: 10px;">Web Speech API not supported in this browser. Please use Chrome or Edge.</p>';
+                    return;
+                }
+
+                // Initialize voice UI
+                voiceUI = new DashboardVoiceUI({
+                    voiceModule: voiceModule,
+                    buttonSelector: '.voice-btn',
+                    transcriptionDisplay: '.transcription-display',
+                    historyDisplay: '.voice-history',
+                    indicatorSelector: '.voice-indicator',
+                    commandHandler: async (transcript) => {
+                        // Send command to chatAgent
+                        try {
+                            const response = await fetch('/api/execute-command', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ command: transcript })
+                            });
+
+                            if (!response.ok) {
+                                throw new Error(`API error: ${response.statusText}`);
+                            }
+
+                            const result = await response.json();
+                            console.log('Command executed:', result);
+
+                            // Speak the result
+                            if (voiceModule.config.ttsEnabled) {
+                                voiceModule.speak(result.response || 'Command executed successfully');
+                            }
+                        } catch (error) {
+                            console.error('Error executing command:', error);
+                            throw error;
+                        }
+                    }
+                });
+
+                console.log('[Dashboard] Voice module initialized');
+            } catch (error) {
+                console.error('Failed to initialize voice module:', error);
+            }
+        }
+
         // Fetch and display statistics
         async function refreshStats() {
             try {
@@ -454,6 +804,11 @@
 
         // Auto-refresh every 5 seconds
         setInterval(refreshStats, 5000);
+
+        // Initialize voice module
+        window.addEventListener('DOMContentLoaded', () => {
+            initializeVoice();
+        });
 
         // Initial load
         refreshStats();

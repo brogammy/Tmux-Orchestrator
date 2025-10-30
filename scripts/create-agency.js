@@ -238,9 +238,9 @@ module.exports = {{AGENT_CLASS}};
   "description": "{{AGENCY_DESCRIPTION}}",
   "purpose": "{{AGENCY_PURPOSE}}",
   "created": "{{TIMESTAMP}}",
-  "projectManager": {
+    "projectManager": {
     "file": "ProjectManager.js",
-    "model": "claude-sonnet"
+    "model": "opencode-sonnet"
   },
   "agents": [
 {{AGENT_CONFIGS}}
@@ -377,7 +377,7 @@ class AgencyGenerator {
       "type": "${a.type || a.name}",
       "description": "${a.description}",
       "file": "${a.name}.js",
-      "model": "${a.model || 'claude-sonnet'}"
+      "model": "${a.model || 'opencode-sonnet'}"
     }`)
       .join(',\n');
 

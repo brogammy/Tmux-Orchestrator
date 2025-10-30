@@ -109,12 +109,12 @@ Schedule yourself to check in every 3 hours."`);
     );
 
     agencyMessage('WebDevAgency PM', 'Analyzing task: Complex frontend implementation');
-    agencyMessage('WebDevAgency PM', 'Selected claude-sonnet (paid) for FrontendAgent');
-    agencyMessage('FrontendAgent', 'Executing with claude-sonnet (paid)...');
+  agencyMessage('WebDevAgency PM', 'Selected opencode-sonnet (paid) for FrontendAgent');
+  agencyMessage('FrontendAgent', 'Executing with opencode-sonnet (paid)...');
 
     log('\n📊 Frontend Result:', 'magenta');
     log(`  Agency: ${result2.agency}`, 'dim');
-    log(`  Model Selected: claude-sonnet (paid)`, 'dim');
+  log(`  Model Selected: opencode-sonnet (paid)`, 'dim');
     log(`  Reason: Complex UI with authentication flow`, 'dim');
 
   } catch (error) {
@@ -137,18 +137,18 @@ Schedule yourself to check in every 3 hours."`);
 
     systemMessage('Routing to BackendAgency (if available) or BuildingAgency...');
     agencyMessage('Agency PM', 'Analyzing task: Complex security implementation');
-    agencyMessage('Agency PM', 'Selected claude-sonnet (paid) for security-critical code');
+  agencyMessage('Agency PM', 'Selected opencode-sonnet (paid) for security-critical code');
 
     // Simulate rate limit and fallback
     log('\n⚠️  RATE LIMIT DETECTED', 'yellow');
-    systemMessage('Claude Sonnet rate limited (429)');
+  systemMessage('Opencode Sonnet rate limited (429)');
     systemMessage('Activating automatic fallback...');
     agencyMessage('Agency PM', 'Falling back to deepseek-coder (free)');
     agencyMessage('BackendAgent', 'Executing with deepseek-coder (free)...');
 
     log('\n📊 Backend Result:', 'magenta');
     log(`  Agency: ${result3.agency}`, 'dim');
-    log(`  Primary Model: claude-sonnet (paid) - RATE LIMITED`, 'dim');
+  log(`  Primary Model: opencode-sonnet (paid) - RATE LIMITED`, 'dim');
     log(`  Fallback Model: deepseek-coder (free) - SUCCESS ✓`, 'dim');
     log(`  Task Completed: Yes`, 'dim');
 
@@ -210,8 +210,8 @@ Schedule yourself to check in every 3 hours."`);
   log(`  - deepseek-coder (free): 1 task (fallback)`, 'dim');
   log(``, 'dim');
   log(`Paid Models Used:`, 'yellow');
-  log(`  - claude-sonnet (paid): 1 task`, 'dim');
-  log(`  - claude-sonnet (paid): 1 task FAILED (rate limit)`, 'dim');
+  log(`  - opencode-sonnet (paid): 1 task`, 'dim');
+  log(`  - opencode-sonnet (paid): 1 task FAILED (rate limit)`, 'dim');
   log(``, 'dim');
   log(`Cost Optimization: 75% free model usage`, 'green');
   log(`Fallback Success Rate: 100%`, 'green');

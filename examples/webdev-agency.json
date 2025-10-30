@@ -6,29 +6,29 @@
     {
       "name": "FrontendAgent",
       "description": "Frontend development specialist for React, Vue, and modern UI",
-      "type": "FrontendAgent",
-      "model": "claude-sonnet",
+  "type": "FrontendAgent",
+  "model": "opencode-sonnet",
       "instructions": "Build responsive, accessible, and performant user interfaces. Use modern frameworks and best practices."
     },
     {
       "name": "BackendAgent",
       "description": "Backend development specialist for APIs and server-side logic",
-      "type": "BackendAgent",
-      "model": "claude-sonnet",
+  "type": "BackendAgent",
+  "model": "opencode-sonnet",
       "instructions": "Create scalable, secure APIs and services. Handle authentication, data persistence, and business logic."
     },
     {
       "name": "DatabaseAgent",
       "description": "Database design and optimization specialist",
-      "type": "DatabaseAgent",
-      "model": "claude-haiku",
+  "type": "DatabaseAgent",
+  "model": "opencode-haiku",
       "instructions": "Design efficient database schemas, write optimized queries, and ensure data integrity."
     },
     {
       "name": "CodeValidator",
       "description": "Code validation and testing specialist",
-      "type": "CodeValidator",
-      "model": "claude-haiku",
+  "type": "CodeValidator",
+  "model": "opencode-haiku",
       "instructions": "Validate code quality, perform security audits, and ensure requirements are met."
     }
   ],

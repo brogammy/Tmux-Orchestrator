@@ -9,6 +9,9 @@ const path = require('path');
 const net = require('net');
 const fsSync = require('fs');
 const { spawn } = require('child_process');
+const os = require('os');
+const crypto = require('crypto');
+const { mkdtempSync, writeFileSync, rmSync } = require('fs');
 
 const PORT = process.env.DASHBOARD_PORT || 3000;
 const SOCKET_PATH = process.env.MCP_SOCKET || `/run/user/${process.getuid()}/tmux-orchestrator-mcp.sock`;
@@ -197,6 +200,105 @@ const server = http.createServer(async (req, res) => {
   // 404
   res.writeHead(404);
   res.end('Not found');
+});
+
+// --- Execution runner manager (containerized) ---
+const JOBS = new Map();
+
+function makeJobId() {
+  return crypto.randomBytes(6).toString('hex');
+}
+
+function submitJob({ language = 'node', code = '', timeout = 10000 }) {
+  const id = makeJobId();
+  const workdir = mkdtempSync(path.join(os.tmpdir(), `tmux-run-${id}-`));
+  const job = {
+    id,
+    language,
+    status: 'queued',
+    createdAt: new Date().toISOString(),
+    startedAt: null,
+    finishedAt: null,
+    exitCode: null,
+    stdout: '',
+    stderr: '',
+    error: null
+  };
+  JOBS.set(id, job);
+
+  // write code file
+  const filename = language === 'python' ? 'code.py' : 'code.js';
+  const filePath = path.join(workdir, filename);
+  writeFileSync(filePath, code, 'utf8');
+
+  // spawn runner script
+  job.status = 'running';
+  job.startedAt = new Date().toISOString();
+
+  const runner = spawn('bash', [path.join(__dirname, '..', 'runner', 'run_in_docker.sh'), language, workdir, String(timeout)], { stdio: ['ignore', 'pipe', 'pipe'] });
+
+  runner.stdout.setEncoding('utf8');
+  runner.stdout.on('data', (c) => { job.stdout += c; });
+  runner.stderr.setEncoding('utf8');
+  runner.stderr.on('data', (c) => { job.stderr += c; });
+
+  runner.on('error', (err) => {
+    job.status = 'failed';
+    job.error = String(err.message || err);
+    job.finishedAt = new Date().toISOString();
+    try { rmSync(workdir, { recursive: true, force: true }); } catch (e) {}
+  });
+
+  runner.on('close', (code) => {
+    job.exitCode = code;
+    job.finishedAt = new Date().toISOString();
+    job.status = code === 0 ? 'completed' : 'failed';
+    try { rmSync(workdir, { recursive: true, force: true }); } catch (e) {}
+  });
+
+  return id;
+}
+
+// API: submit execution job
+// POST /api/execute { language, code, timeout }
+server.on('request', async (req, res) => {
+  // only intercept execute endpoints
+  if (req.method === 'POST' && req.url === '/api/execute') {
+    let body = '';
+    req.on('data', (ch) => body += ch.toString());
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body || '{}');
+        const id = submitJob(payload);
+        res.writeHead(202, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ id }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: String(e.message) }));
+      }
+    });
+    return;
+  }
+
+  // GET /api/execution-status?id=JOBID
+  if (req.method === 'GET' && req.url && req.url.startsWith('/api/execution-status')) {
+    const urlObj = new URL(req.url, `http://localhost:${PORT}`);
+    const id = urlObj.searchParams.get('id');
+    if (!id) {
+      res.writeHead(400, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'missing id' }));
+      return;
+    }
+    const job = JOBS.get(id);
+    if (!job) {
+      res.writeHead(404, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'job not found' }));
+      return;
+    }
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify(job));
+    return;
+  }
 });
 
 server.listen(PORT, () => {

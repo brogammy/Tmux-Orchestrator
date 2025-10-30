@@ -1,0 +1,44 @@
+{
+  "session_name": "orchestrator",
+  "project_root": ".",
+  "default_provider": "opencode",
+  "providers": {
+    "opencode": {
+      "global_options": {
+        "timeout": 60
+      }
+    },
+    "ollama": {},
+    "ollama-cloud": {
+      "base_url": "https://ollama.cloud/api",
+      "api_key": "YOUR_OLLAMA_CLOUD_API_KEY"
+    }
+  },
+  "ollama_models": [
+    "llama2",
+    "llama3"
+  ],
+  "windows": [
+    {
+      "name": "agents",
+      "panes": [
+        {
+          "commands": [
+            {"provider": "opencode", "opencode": {"command": "run", "options": {"model": "opencode-sonnet"}}}
+          ]
+        },
+        {
+          "commands": [
+            {"provider": "ollama", "ollama": {"command": "chat", "model": "llama3"}}
+          ]
+        }
+      ]
+    },
+    {
+      "name": "logs",
+      "panes": [
+        {"commands": ["tail -F /var/log/syslog"]}
+      ]
+    }
+  ]
+}

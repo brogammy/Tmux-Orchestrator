@@ -1,0 +1,154 @@
+{
+  "$schema": "./agent-config-schema.json",
+  "description": "Agent configuration with free/paid model tagging for OpenCode integration",
+  "models": {
+    "claude-sonnet": {
+      "provider": "anthropic",
+      "model": "claude-3-5-sonnet-20241022",
+      "tier": "paid",
+      "capabilities": ["coding", "reasoning", "analysis", "planning"],
+      "costPer1kTokens": 0.003,
+      "rateLimit": {
+        "requestsPerMinute": 50,
+        "tokensPerMinute": 100000
+      }
+    },
+    "claude-haiku": {
+      "provider": "anthropic",
+      "model": "claude-3-5-haiku-20241022",
+      "tier": "paid",
+      "capabilities": ["coding", "fast-responses", "simple-tasks"],
+      "costPer1kTokens": 0.00025,
+      "rateLimit": {
+        "requestsPerMinute": 50,
+        "tokensPerMinute": 100000
+      }
+    },
+    "qwen-coder": {
+      "provider": "opencode",
+      "model": "qwen3-coder:480b-cloud",
+      "tier": "free",
+      "capabilities": ["coding", "debugging", "code-review"],
+      "costPer1kTokens": 0,
+      "rateLimit": null
+    },
+    "deepseek-coder": {
+      "provider": "opencode",
+      "model": "deepseek-coder-v2:latest",
+      "tier": "free",
+      "capabilities": ["coding", "architecture", "patterns"],
+      "costPer1kTokens": 0,
+      "rateLimit": null
+    },
+    "llama-coder": {
+      "provider": "opencode",
+      "model": "codellama:34b",
+      "tier": "free",
+      "capabilities": ["coding", "completion", "generation"],
+      "costPer1kTokens": 0,
+      "rateLimit": null
+    },
+    "mistral-nemo": {
+      "provider": "opencode",
+      "model": "mistral-nemo:latest",
+      "tier": "free",
+      "capabilities": ["reasoning", "analysis", "general"],
+      "costPer1kTokens": 0,
+      "rateLimit": null
+    },
+    "phi-3": {
+      "provider": "opencode",
+      "model": "phi3:14b",
+      "tier": "free",
+      "capabilities": ["reasoning", "fast-responses", "analysis"],
+      "costPer1kTokens": 0,
+      "rateLimit": null
+    },
+    "glm-coder": {
+      "provider": "opencode",
+      "model": "glm-4.6:cloud",
+      "tier": "free",
+      "capabilities": ["coding", "reasoning", "analysis"],
+      "costPer1kTokens": 0,
+      "rateLimit": null
+    },
+    "gpt-oss-coder": {
+      "provider": "ollama",
+      "model": "gpt-oss:120b-cloud",
+      "tier": "free",
+      "capabilities": ["coding", "general", "completion"],
+      "costPer1kTokens": 0,
+      "rateLimit": null,
+      "baseUrl": "http://100.104.226.70:11434",
+      "apiKey": "apikey"
+    },
+    "deepseek-v3-coder": {
+      "provider": "ollama",
+      "model": "deepseek-v3.1:671b-cloud",
+      "tier": "free",
+      "capabilities": ["coding", "architecture", "patterns", "reasoning"],
+      "costPer1kTokens": 0,
+      "rateLimit": null,
+      "baseUrl": "http://100.104.226.70:11434",
+      "apiKey": "apikey"
+    }
+  },
+  "agentConfigs": {
+    "ProjectManager": {
+      "primaryModel": "deepseek-v3-coder",
+      "fallbackModels": ["deepseek-coder", "qwen-coder"],
+      "systemPrompt": "You are a Project Manager. Create prompts and delegate tasks to your agency's agents based on their capabilities. Plan, coordinate, and ensure quality delivery.",
+      "capabilities": ["planning", "coordination", "delegation", "quality-assurance"],
+      "allowFallback": true
+    },
+    "CodeAgent": {
+      "primaryModel": "qwen-coder",
+      "fallbackModels": ["qwen-coder", "deepseek-coder", "llama-coder"],
+      "systemPrompt": "You are a CodeAgent. Implement code based on specifications. Write clean, efficient, and well-documented code.",
+      "capabilities": ["coding", "implementation", "debugging"],
+      "allowFallback": true
+    },
+    "CodeValidator": {
+      "primaryModel": "phi-3",
+      "fallbackModels": ["phi-3", "mistral-nemo"],
+      "systemPrompt": "You are a CodeValidator. Validate code quality, test functionality, and ensure requirements are met. Provide constructive feedback.",
+      "capabilities": ["validation", "testing", "code-review"],
+      "allowFallback": true
+    },
+    "FrontendAgent": {
+      "primaryModel": "deepseek-coder",
+      "fallbackModels": ["qwen-coder", "llama-coder"],
+      "systemPrompt": "You are a FrontendAgent specialized in UI/UX implementation. Build responsive, accessible, and performant interfaces.",
+      "capabilities": ["frontend", "ui", "ux", "react", "vue"],
+      "allowFallback": true
+    },
+    "BackendAgent": {
+      "primaryModel": "deepseek-coder",
+      "fallbackModels": ["deepseek-coder", "qwen-coder"],
+      "systemPrompt": "You are a BackendAgent specialized in server-side logic. Build scalable, secure, and efficient APIs and services.",
+      "capabilities": ["backend", "api", "database", "architecture"],
+      "allowFallback": true
+    },
+    "APIDesigner": {
+      "primaryModel": "deepseek-coder",
+      "fallbackModels": ["deepseek-coder", "mistral-nemo"],
+      "systemPrompt": "You are an APIDesigner. Design RESTful and GraphQL APIs following best practices. Define schemas, endpoints, and contracts.",
+      "capabilities": ["api-design", "schemas", "contracts", "documentation"],
+      "allowFallback": true
+    },
+    "DatabaseAgent": {
+      "primaryModel": "glm-coder",
+      "fallbackModels": ["qwen-coder", "phi-3"],
+      "systemPrompt": "You are a DatabaseAgent. Design schemas, write queries, and optimize database performance.",
+      "capabilities": ["database", "sql", "nosql", "optimization"],
+      "allowFallback": true
+    }
+  },
+  "fallbackStrategy": {
+    "enabled": true,
+    "retryAttempts": 3,
+    "retryDelay": 1000,
+    "preferFreeOnRateLimit": true,
+    "logFallbacks": true
+  }
+}

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Lightweight shim for `uvx` to forward to the local MCP server for testing.
+# This allows tools that try to spawn `uvx` to run the project's MCP server.
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PY_SCRIPT="$SCRIPT_DIR/mcp_server_tmux.py"
+
+if [ ! -f "$PY_SCRIPT" ]; then
+  echo "mcp_server_tmux.py not found in project root" >&2
+  exit 2
+fi
+
+# Forward any args to the python script
+exec python3 "$PY_SCRIPT" "$@"

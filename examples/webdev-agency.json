@@ -1,0 +1,50 @@
+{
+  "name": "WebDevAgency",
+  "description": "Full-stack web development agency with frontend, backend, and validation specialists",
+  "purpose": "web development",
+  "agents": [
+    {
+      "name": "FrontendAgent",
+      "description": "Frontend development specialist for React, Vue, and modern UI",
+      "type": "FrontendAgent",
+      "model": "claude-sonnet",
+      "instructions": "Build responsive, accessible, and performant user interfaces. Use modern frameworks and best practices."
+    },
+    {
+      "name": "BackendAgent",
+      "description": "Backend development specialist for APIs and server-side logic",
+      "type": "BackendAgent",
+      "model": "claude-sonnet",
+      "instructions": "Create scalable, secure APIs and services. Handle authentication, data persistence, and business logic."
+    },
+    {
+      "name": "DatabaseAgent",
+      "description": "Database design and optimization specialist",
+      "type": "DatabaseAgent",
+      "model": "claude-haiku",
+      "instructions": "Design efficient database schemas, write optimized queries, and ensure data integrity."
+    },
+    {
+      "name": "CodeValidator",
+      "description": "Code validation and testing specialist",
+      "type": "CodeValidator",
+      "model": "claude-haiku",
+      "instructions": "Validate code quality, perform security audits, and ensure requirements are met."
+    }
+  ],
+  "capabilities": [
+    "frontend-development",
+    "backend-development",
+    "fullstack-development",
+    "api-design",
+    "database-design",
+    "web-applications",
+    "responsive-ui",
+    "rest-apis",
+    "graphql"
+  ],
+  "keywords": [
+    "web", "frontend", "backend", "fullstack", "react", "vue", "api",
+    "ui", "ux", "database", "rest", "graphql", "authentication", "spa"
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "name": "BuildingAgency",
+  "description": "General-purpose development agency for building software applications",
+  "purpose": "software development",
+  "created": "2025-10-29T00:00:00.000Z",
+  "projectManager": {
+    "file": "ProjectManager.js",
+    "model": "claude-sonnet",
+    "capabilities": [
+      "task-planning",
+      "agent-coordination",
+      "model-optimization",
+      "quality-assurance"
+    ]
+  },
+  "agents": [
+    {
+      "name": "CodeAgent",
+      "type": "CodeAgent",
+      "description": "General-purpose coding agent for implementation tasks",
+      "file": "CodeAgent.js",
+      "model": "claude-sonnet",
+      "fallbackModels": [
+        "qwen-coder",
+        "deepseek-coder",
+        "llama-coder"
+      ],
+      "capabilities": [
+        "coding",
+        "implementation",
+        "debugging",
+        "refactoring",
+        "optimization"
+      ]
+    },
+    {
+      "name": "CodeValidator",
+      "type": "CodeValidator",
+      "description": "Code validation and quality assurance specialist",
+      "file": "CodeValidator.js",
+      "model": "claude-haiku",
+      "fallbackModels": [
+        "phi-3",
+        "mistral-nemo"
+      ],
+      "capabilities": [
+        "validation",
+        "testing",
+        "code-review",
+        "security-audit",
+        "performance-analysis"
+      ]
+    }
+  ],
+  "capabilities": [
+    "software-development",
+    "code-implementation",
+    "code-validation",
+    "debugging",
+    "refactoring",
+    "testing",
+    "general-programming"
+  ],
+  "keywords": [
+    "build",
+    "code",
+    "implement",
+    "create",
+    "function",
+    "class",
+    "develop",
+    "write",
+    "program",
+    "script",
+    "software",
+    "application"
+  ],
+  "features": {
+    "dynamicModelSelection": true,
+    "taskOptimization": true,
+    "automaticFallback": true,
+    "freeModelSupport": true
+  }
+}

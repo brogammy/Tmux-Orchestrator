@@ -1,0 +1,36 @@
+# Dockerfile for Agency Container
+# Each agency (PM + agents) runs in its own container
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy agency files
+COPY lib/ ./lib/
+COPY config/ ./config/
+COPY Agencies/ ./Agencies/
+
+# Install OpenCode CLI tools
+RUN npm install -g @opencode-ai/sdk
+
+# Environment variables
+ENV OPENCODE_URL=http://opencode:4096
+ENV NODE_ENV=production
+
+# Expose port for agency communication
+EXPOSE 8000
+
+# Agency name will be passed as build arg
+ARG AGENCY_NAME
+ENV AGENCY_NAME=${AGENCY_NAME}
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD node -e "console.log('healthy')" || exit 1
+
+# Start agency
+CMD ["node", "--experimental-modules", "agency-runner.js"]

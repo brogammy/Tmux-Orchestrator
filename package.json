@@ -1,0 +1,18 @@
+{
+  "name": "tmux-orchestrator",
+  "version": "2.0.0",
+  "description": "Multi-Agency Autonomous AI System with OpenCode Integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "start:dashboard": "node dashboard/server.js",
+    "start:chat": "node chatAgent.js"
+  },
+  "keywords": ["opencode", "ai", "orchestrator", "agents", "tmux"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@opencode-ai/sdk": "^0.15.25"
+  }
+}

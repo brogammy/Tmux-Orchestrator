@@ -1,0 +1,123 @@
+# Docker Compose for Tmux-Orchestrator
+# Containerized Multi-Agency System
+#
+# Architecture:
+# - chatAgent: Standalone container (user + chat interface)
+# - OpenCode: OpenCode server
+# - Agencies: Each agency in its own container
+# - Dashboard: Part of chatAgent container
+
+version: '3.8'
+
+services:
+  # OpenCode Server
+  opencode:
+    image: opencode/server:latest
+    container_name: opencode-server
+    ports:
+      - "4096:4096"
+    volumes:
+      - opencode-data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4096"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Chat Agent + Dashboard (Standalone)
+  chatagent:
+    build:
+      context: .
+      dockerfile: Dockerfile.chat
+    container_name: tmux-orchestrator-chat
+    ports:
+      - "3000:3000"  # Dashboard
+      - "3001:3001"  # Chat API
+    environment:
+      - OPENCODE_URL=http://opencode:4096
+      - NODE_ENV=production
+      - STANDALONE_MODE=true
+      - PREFER_FREE_MODELS=true
+    volumes:
+      - chat-history:/app/data
+    depends_on:
+      - opencode
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "http://localhost:3000/api/stats"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # BuildingAgency (PM + Agents in one container)
+  buildingagency:
+    build:
+      context: .
+      dockerfile: Dockerfile.agency
+      args:
+        AGENCY_NAME: BuildingAgency
+    container_name: agency-building
+    environment:
+      - OPENCODE_URL=http://opencode:4096
+      - AGENCY_NAME=BuildingAgency
+      - NODE_ENV=production
+      - PREFER_FREE_MODELS=true
+    ports:
+      - "8001:8000"
+    volumes:
+      - building-agency-data:/app/data
+    depends_on:
+      - opencode
+      - chatagent
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "console.log('healthy')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # WebDevAgency (when created)
+  # webdevagency:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.agency
+  #     args:
+  #       AGENCY_NAME: WebDevAgency
+  #   container_name: agency-webdev
+  #   environment:
+  #     - OPENCODE_URL=http://opencode:4096
+  #     - AGENCY_NAME=WebDevAgency
+  #   ports:
+  #     - "8002:8000"
+  #   depends_on:
+  #     - opencode
+  #     - chatagent
+  #   restart: unless-stopped
+
+  # BackendAgency (when created)
+  # backendagency:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile.agency
+  #     args:
+  #       AGENCY_NAME: BackendAgency
+  #   container_name: agency-backend
+  #   environment:
+  #     - OPENCODE_URL=http://opencode:4096
+  #     - AGENCY_NAME=BackendAgency
+  #   ports:
+  #     - "8003:8000"
+  #   depends_on:
+  #     - opencode
+  #     - chatagent
+  #   restart: unless-stopped
+
+volumes:
+  opencode-data:
+  chat-history:
+  building-agency-data:
+
+networks:
+  default:
+    name: tmux-orchestrator-network

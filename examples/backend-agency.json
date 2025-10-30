@@ -1,0 +1,58 @@
+{
+  "name": "BackendAgency",
+  "description": "Specialized backend development agency for APIs, services, and infrastructure",
+  "purpose": "backend development",
+  "agents": [
+    {
+      "name": "APIDesigner",
+      "description": "API architecture and design specialist",
+      "type": "APIDesigner",
+      "model": "claude-sonnet",
+      "instructions": "Design RESTful and GraphQL APIs following best practices. Define clear contracts and documentation."
+    },
+    {
+      "name": "BackendAgent",
+      "description": "Backend implementation specialist",
+      "type": "BackendAgent",
+      "model": "claude-sonnet",
+      "instructions": "Implement scalable backend services with proper error handling and authentication."
+    },
+    {
+      "name": "DatabaseAgent",
+      "description": "Database specialist for schema design and optimization",
+      "type": "DatabaseAgent",
+      "model": "claude-haiku",
+      "instructions": "Design database schemas, optimize queries, and ensure data consistency."
+    },
+    {
+      "name": "SecurityAgent",
+      "description": "Security and authentication specialist",
+      "type": "SecurityAgent",
+      "model": "claude-sonnet",
+      "instructions": "Implement authentication, authorization, and security best practices. Audit code for vulnerabilities."
+    },
+    {
+      "name": "CodeValidator",
+      "description": "Backend code validation and testing",
+      "type": "CodeValidator",
+      "model": "claude-haiku",
+      "instructions": "Validate backend code, test API endpoints, and ensure performance standards."
+    }
+  ],
+  "capabilities": [
+    "api-development",
+    "microservices",
+    "authentication",
+    "authorization",
+    "database-design",
+    "backend-architecture",
+    "rest-apis",
+    "graphql",
+    "security",
+    "performance-optimization"
+  ],
+  "keywords": [
+    "backend", "api", "rest", "graphql", "microservices", "authentication",
+    "database", "sql", "nosql", "security", "authorization", "jwt", "oauth"
+  ]
+}

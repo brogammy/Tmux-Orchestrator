@@ -1,0 +1,36 @@
+
+╔════════════════════════════════════════════════════════════════╗
+║              TMUX-ORCHESTRATOR DASHBOARD                       ║
+╚════════════════════════════════════════════════════════════════╝
+
+🌐 Dashboard URL: http://localhost:3000
+
+📊 API Endpoints:
+   GET /api/stats    - System statistics
+   GET /api/panels   - Tmux panel status
+   GET /api/agencies - Available agencies
+
+Press Ctrl+C to stop the server
+  
+2025-10-30T03:21:01.906Z - GET /api/stats
+2025-10-30T03:21:10.399Z - GET /
+2025-10-30T03:21:10.427Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:21:10.484Z - GET /favicon.ico
+2025-10-30T03:28:46.405Z - GET /
+2025-10-30T03:28:46.419Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:28:48.510Z - GET /
+2025-10-30T03:28:48.523Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:28:49.339Z - GET /
+2025-10-30T03:28:49.352Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:28:50.907Z - GET /
+2025-10-30T03:28:50.920Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:28:50.937Z - GET /favicon.ico
+2025-10-30T03:37:18.225Z - GET /
+2025-10-30T03:37:18.239Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:37:33.062Z - GET /
+2025-10-30T03:37:33.077Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T03:37:33.099Z - GET /favicon.ico
+2025-10-30T04:29:15.400Z - GET /
+2025-10-30T04:29:15.412Z - GET /.well-known/appspecific/com.chrome.devtools.json
+2025-10-30T04:29:17.047Z - GET /
+2025-10-30T04:29:17.058Z - GET /.well-known/appspecific/com.chrome.devtools.json

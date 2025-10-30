@@ -1,0 +1,48 @@
+# Dockerfile for Standalone Chat Agent
+# User + chatAgent in separate container
+# Can chat even when not building (plan mode)
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install system dependencies for voice support
+RUN apk add --no-cache \
+    sox \
+    python3 \
+    py3-pip \
+    ffmpeg
+
+# Install whisper.cpp for voice transcription (optional)
+# RUN apk add --no-cache whisper-cpp
+
+# Install Node dependencies
+COPY package*.json ./
+RUN npm install
+
+# Copy chat agent files
+COPY chatAgent.js ./
+COPY orchestrator.js ./
+COPY lib/ ./lib/
+COPY config/ ./config/
+
+# Copy dashboard files
+COPY dashboard/ ./dashboard/
+
+# Environment variables
+ENV OPENCODE_URL=http://opencode:4096
+ENV NODE_ENV=production
+ENV STANDALONE_MODE=true
+
+# Expose ports
+EXPOSE 3000 3001
+
+# Port 3000: Dashboard
+# Port 3001: Chat API
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/api/stats || exit 1
+
+# Start script that runs both dashboard and chat agent
+CMD ["sh", "-c", "node dashboard/server.js & node chatAgent.js"]

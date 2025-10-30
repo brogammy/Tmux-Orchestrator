@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Execution Environment - Tmux-Orchestrator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+        }
+
+        .mode-indicator {
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .mode-indicator.plan {
+            background: #3b82f6;
+        }
+
+        .mode-indicator.build {
+            background: #10b981;
+        }
+
+        .main-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            overflow: hidden;
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            border-right: 2px solid #3a3a3a;
+        }
+
+        .panel:last-child {
+            border-right: none;
+        }
+
+        .panel-header {
+            background: #2a2a2a;
+            padding: 10px 15px;
+            border-bottom: 2px solid #3a3a3a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .panel-status {
+            font-size: 0.9em;
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+
+        .panel-status.idle {
+            background: #fbbf24;
+            color: #1a1a1a;
+        }
+
+        .panel-status.active {
+            background: #4ade80;
+            color: #1a1a1a;
+        }
+
+        .panel-status.error {
+            background: #ef4444;
+            color: white;
+        }
+
+        .panel-content {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #1e1e1e;
+        }
+
+        .code-editor {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre;
+            color: #e0e0e0;
+        }
+
+        .code-line {
+            display: flex;
+            padding: 2px 0;
+        }
+
+        .line-number {
+            color: #6a6a6a;
+            margin-right: 15px;
+            min-width: 40px;
+            text-align: right;
+            user-select: none;
+        }
+
+        .line-content {
+            flex: 1;
+        }
+
+        .execution-output {
+            font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .output-line {
+            padding: 3px 0;
+            border-left: 3px solid transparent;
+            padding-left: 10px;
+        }
+
+        .output-line.info {
+            border-left-color: #3b82f6;
+        }
+
+        .output-line.success {
+            border-left-color: #10b981;
+            color: #4ade80;
+        }
+
+        .output-line.error {
+            border-left-color: #ef4444;
+            color: #f87171;
+        }
+
+        .output-line.warning {
+            border-left-color: #fbbf24;
+            color: #fbbf24;
+        }
+
+        .agent-activity {
+            background: #2a2a2a;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+
+        .agent-activity.pm {
+            border-left-color: #fee140;
+        }
+
+        .agent-activity.codeagent {
+            border-left-color: #30cfd0;
+        }
+
+        .agent-activity.validator {
+            border-left-color: #4ade80;
+        }
+
+        .agent-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .agent-action {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .model-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        .model-badge.free {
+            background: #4ade80;
+            color: #1a1a1a;
+        }
+
+        .model-badge.paid {
+            background: #fbbf24;
+            color: #1a1a1a;
+        }
+
+        .timestamp {
+            color: #6a6a6a;
+            font-size: 0.85em;
+            margin-top: 3px;
+        }
+
+        .footer {
+            background: #2a2a2a;
+            padding: 10px 20px;
+            border-top: 2px solid #3a3a3a;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9em;
+        }
+
+        .footer-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>⚙️ Execution Environment</h1>
+        <div class="mode-indicator build" id="mode-indicator">🏗️ BUILD MODE</div>
+    </div>
+
+    <div class="main-container">
+        <!-- Left Panel: Code Editor -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">📝 Code Editor</span>
+                <span class="panel-status idle" id="editor-status">Idle</span>
+            </div>
+            <div class="panel-content">
+                <div class="code-editor" id="code-editor">
+                    <div class="code-line">
+                        <span class="line-number">1</span>
+                        <span class="line-content">// Waiting for code generation...</span>
+                    </div>
+                    <div class="code-line">
+                        <span class="line-number">2</span>
+                        <span class="line-content">// Code will appear here when agents execute</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Execution Results -->
+        <div class="panel">
+            <div class="panel-header">
+                <span class="panel-title">▶️ Execution Results</span>
+                <span class="panel-status idle" id="results-status">Idle</span>
+            </div>
+            <div class="panel-content">
+                <div class="execution-output" id="execution-output">
+                    <div class="output-line info">
+                        <strong>🚀 Execution Environment Ready</strong>
+                    </div>
+                    <div class="output-line">
+                        Waiting for tasks from orchestrator...
+                    </div>
+                    <div class="output-line">
+
+                    </div>
+                    <div class="output-line info">
+                        <strong>📋 Active Agencies:</strong>
+                    </div>
+                    <div class="agent-activity pm">
+                        <div class="agent-name">🏢 BuildingAgency - Project Manager</div>
+                        <div class="agent-action">Status: Ready</div>
+                        <div class="timestamp">Initialized at: <span id="init-time"></span></div>
+                    </div>
+                    <div class="agent-activity codeagent">
+                        <div class="agent-name">🤖 CodeAgent <span class="model-badge free">free models</span></div>
+                        <div class="agent-action">Status: Idle, waiting for PM</div>
+                    </div>
+                    <div class="agent-activity validator">
+                        <div class="agent-name">✅ CodeValidator <span class="model-badge free">free models</span></div>
+                        <div class="agent-action">Status: Idle, waiting for PM</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-item">
+            <span class="status-dot"></span>
+            <span>Connected to Orchestrator</span>
+        </div>
+        <div class="footer-item">
+            <span>OpenCode: <span id="opencode-status">Connected</span></span>
+        </div>
+        <div class="footer-item">
+            <span>Dashboard: <a href="http://localhost:3000" target="_blank" style="color: #667eea;">localhost:3000</a></span>
+        </div>
+    </div>
+
+    <script>
+        // Set initialization time
+        document.getElementById('init-time').textContent = new Date().toLocaleTimeString();
+
+        // Simulate real-time updates (in production, this would connect via WebSocket)
+        let lineNumber = 3;
+
+        function addCodeLine(content) {
+            const editor = document.getElementById('code-editor');
+            const line = document.createElement('div');
+            line.className = 'code-line';
+            line.innerHTML = `
+                <span class="line-number">${lineNumber++}</span>
+                <span class="line-content">${content}</span>
+            `;
+            editor.appendChild(line);
+            editor.scrollTop = editor.scrollHeight;
+        }
+
+        function addOutputLine(content, type = '') {
+            const output = document.getElementById('execution-output');
+            const line = document.createElement('div');
+            line.className = `output-line ${type}`;
+            line.textContent = content;
+            output.appendChild(line);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function addAgentActivity(agentType, agentName, action, model = null) {
+            const output = document.getElementById('execution-output');
+            const activity = document.createElement('div');
+            activity.className = `agent-activity ${agentType}`;
+
+            let modelBadge = '';
+            if (model) {
+                const tier = model.includes('free') ? 'free' : 'paid';
+                modelBadge = `<span class="model-badge ${tier}">${model}</span>`;
+            }
+
+            activity.innerHTML = `
+                <div class="agent-name">${agentName} ${modelBadge}</div>
+                <div class="agent-action">${action}</div>
+                <div class="timestamp">${new Date().toLocaleTimeString()}</div>
+            `;
+            output.appendChild(activity);
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Update status
+        function updateStatus(panel, status) {
+            const statusEl = document.getElementById(`${panel}-status`);
+            statusEl.textContent = status;
+            statusEl.className = `panel-status ${status.toLowerCase()}`;
+        }
+
+        // Update mode indicator
+        function updateMode(isPlanMode) {
+            const indicator = document.getElementById('mode-indicator');
+            if (isPlanMode) {
+                indicator.textContent = '📋 PLAN MODE';
+                indicator.className = 'mode-indicator plan';
+            } else {
+                indicator.textContent = '🏗️ BUILD MODE';
+                indicator.className = 'mode-indicator build';
+            }
+        }
+
+        // Poll for updates (in production, use WebSocket)
+        setInterval(() => {
+            // Check for new activity
+            fetch('/api/execution-status')
+                .then(res => res.json())
+                .then(data => {
+                    // Update UI based on status
+                })
+                .catch(err => console.error('Failed to fetch status'));
+        }, 2000);
+    </script>
+</body>
+</html>

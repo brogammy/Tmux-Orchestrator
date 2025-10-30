@@ -1,0 +1,41 @@
+{
+  "task_id": "test-001",
+  "title": "Create Test API Project",
+  "description": "Build a simple REST API with FastAPI backend and React frontend for task management",
+  "priority": "medium",
+  "requested_by": "User",
+  "assigned_to": "CodeAgency",
+  "requirements": {
+    "backend": {
+      "framework": "FastAPI",
+      "features": ["CRUD operations", "REST API", "data validation"],
+      "testing": "pytest with >90% coverage"
+    },
+    "frontend": {
+      "framework": "React",
+      "features": ["Task list", "Add/Edit/Delete", "Responsive design"],
+      "testing": "Jest + React Testing Library"
+    },
+    "quality": {
+      "code_review": "Required before deployment",
+      "documentation": "README and API docs",
+      "security": "Basic input validation"
+    }
+  },
+  "deliverables": [
+    "Working backend API",
+    "Working frontend interface", 
+    "Comprehensive tests",
+    "Documentation",
+    "Code review approval"
+  ],
+  "workflow": [
+    "Orchestrator receives request",
+    "Planner breaks down into subtasks",
+    "CodeAgency coordinator assigns to agents",
+    "python-agent builds backend",
+    "js-agent builds frontend",
+    "code-reviewer validates quality",
+    "Coordinator integrates and delivers"
+  ]
+}

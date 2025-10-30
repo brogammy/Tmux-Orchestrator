@@ -24,6 +24,19 @@ class TmuxOrchestrator:
     def __init__(self):
         self.safety_mode = True
         self.max_lines_capture = 1000
+        self._session_registry = set()
+        self._load_existing_sessions()
+    
+    def _load_existing_sessions(self):
+        """Load existing tmux sessions into registry to preserve them"""
+        try:
+            result = subprocess.run(["tmux", "list-sessions", "-F", "#{session_name}"], 
+                                  capture_output=True, text=True, check=True)
+            for session in result.stdout.strip().split('\n'):
+                if session:
+                    self._session_registry.add(session)
+        except:
+            pass
         
     def get_tmux_sessions(self) -> List[TmuxSession]:
         """Get all tmux sessions and their windows"""
@@ -93,8 +106,12 @@ class TmuxOrchestrator:
                     "layout": parts[3],
                     "content": self.capture_window_content(session_name, window_index)
                 }
+            else:
+                return {"error": "No window information available"}
         except subprocess.CalledProcessError as e:
             return {"error": f"Could not get window info: {e}"}
+        except Exception as e:
+            return {"error": f"Unexpected error: {e}"}
     
     def send_keys_to_window(self, session_name: str, window_index: int, keys: str, confirm: bool = True) -> bool:
         """Safely send keys to a tmux window with confirmation"""

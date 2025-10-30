@@ -3,7 +3,111 @@
 ## Project Overview
 The Tmux Orchestrator is an AI-powered session management system where Claude acts as the orchestrator for multiple Claude agents across tmux sessions, managing codebases and keeping development moving forward 24/7.
 
-## Agent System Architecture
+## 🚀 Multi-Agency System (NEW)
+
+**Status**: ✅ OPERATIONAL as of 2025-10-28
+
+The orchestrator now supports **Agency-based organization** - containerized groups of AI agents that work together autonomously on complex projects.
+
+### What is an Agency?
+
+An **Agency** is a self-contained autonomous unit consisting of:
+- **Coordinator Agent**: Manages the agency, assigns tasks, interfaces with other agencies
+- **Specialist Agents**: Domain experts (Python dev, JS dev, QA engineer, etc.)
+- **Tools & Scripts**: Agency-specific utilities
+- **Shared Context**: Agency memory, standards, and communication protocols
+
+Each agency lives in its own tmux session with dedicated windows for each agent.
+
+### Active Agencies
+
+Check `registry/active_agencies.json` to see what's currently running.
+
+**Example**: CodeAgency
+- Session: `CodeAgency`
+- Capabilities: backend, frontend, api-design, code-review
+- Agents: python-agent, js-agent, code-reviewer
+- Directory: `agencies/CodeAgency/`
+
+### How to Work with Agencies
+
+#### View Active Agencies
+```bash
+cat registry/active_agencies.json | jq '.agencies[].name'
+tmux ls  # See all running sessions
+```
+
+#### Create New Agency
+```bash
+./scripts/create_agency.sh <AgencyName> \
+  --agents agent1,agent2,agent3 \
+  --capabilities cap1,cap2,cap3
+
+# Example:
+./scripts/create_agency.sh QAAgency \
+  --agents test-lead,qa-engineer \
+  --capabilities testing,quality-assurance
+```
+
+#### Communicate with Agencies
+
+**Intra-Agency** (within an agency):
+```bash
+./scripts/send-agency-message.sh CodeAgency coordinator "Status update please"
+./scripts/send-agency-message.sh CodeAgency python-agent "TASK-001: Fix auth bug"
+```
+
+**Inter-Agency** (between agencies):
+```bash
+./scripts/send-inter-agency.sh CodeAgency QAAgency \
+  '{"type":"handoff","task":"Test auth module","branch":"feature/auth"}'
+```
+
+**Broadcast** (to all agencies):
+```bash
+./scripts/broadcast-agency.sh MetaOrchestrator \
+  '{"type":"alert","message":"Production deploy in 1 hour"}'
+```
+
+#### Message Bus
+All inter-agency communication goes through the message bus (`tools/message_bus.py`):
+
+```bash
+# Check pending messages
+python3 tools/message_bus.py pending CodeAgency
+
+# View all messages
+python3 tools/message_bus.py get CodeAgency
+
+# Show message details
+python3 tools/message_bus.py show <message_id>
+```
+
+### Key Files
+
+- **AGENCY_ARCHITECTURE.md** - Complete architecture design
+- **CURRENT_STATE.md** - Current system state and what's running NOW
+- **QUICK_REFERENCE.md** - Quick commands and common tasks
+- `agencies/<AgencyName>/` - Agency directories
+- `registry/` - Agency registry, message queue, approval queue
+- `scripts/` - Agency management scripts
+
+### Agency Best Practices
+
+1. **Start Coordinator First**: Always brief the coordinator before deploying agents
+2. **Use Message Bus**: Don't bypass the communication protocols
+3. **Log Everything**: All communication is automatically logged
+4. **Check State First**: Always `tmux capture-pane` before sending commands
+5. **Give Clear Tasks**: Break down objectives into specific, actionable items
+
+### 📖 Read These First
+
+If you're a new orchestrator or coordinator:
+1. Read `CURRENT_STATE.md` to see what's active RIGHT NOW
+2. Read `QUICK_REFERENCE.md` for common commands
+3. Read `AGENCY_ARCHITECTURE.md` for deep understanding
+
+## Agent System Architecture (Original)
 
 ### Orchestrator Role
 As the Orchestrator, you maintain high-level oversight without getting bogged down in implementation details:

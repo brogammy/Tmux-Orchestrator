@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "llama2": {
+          "name": "Llama 2"
+        }
+      }
+    }
+  },
+  "command": {
+    "tmux_orchestrator": {
+      "command": "python3 /home/sauly/dev/Tmux-Orchestrator/mcp_server_tmux.py",
+      "description": "Starts the Tmux Orchestrator MCP Server",
+      "template": "python3 /home/sauly/dev/Tmux-Orchestrator/mcp_server_tmux.py"
+    }
+  },
+  "tools": {
+    "tmux_orchestrator": true
+  }
+}

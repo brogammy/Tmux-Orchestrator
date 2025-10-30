@@ -1,0 +1,9 @@
+=== CodeAgency Activity Log ===
+Created: 2025-10-29T04:36:14Z
+Status: Active
+
+[2025-10-29T04:40:25Z] INTRA → coordinator: Great job getting initialized! Now please start Claude in the python-agent window (window 1) and brief them with their instructions from agents/python-agent.md
+[2025-10-29T04:41:17Z] INTRA → coordinator: I see you're having trouble with tmux commands. Let me help: you're in session 'CodeAgency', window 1 is 'python-agent'. Use these exact commands:
+1. tmux send-keys -t CodeAgency:1 'claude' Enter
+2. sleep 5
+3. Then use the send-claude-message.sh script to send the briefing
